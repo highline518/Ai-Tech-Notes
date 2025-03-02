@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Clipboard, ClipboardCheck, Loader2, Wrench, Car, Settings } from 'lucide-react';
+import { Clipboard, ClipboardCheck, Loader2, Wrench, CheckCircle, AlertCircle, FileText } from 'lucide-react';
 
 function App() {
   const [input, setInput] = useState('');
@@ -34,7 +34,7 @@ function App() {
           'X-Title': 'Technician Notes AI Rewriter',
         },
         body: JSON.stringify({
-          model: 'anthropic/claude-3-opus-20240229',
+          model: 'openai/gpt-4-turbo',
           messages: [
             {
               role: 'system',
@@ -128,41 +128,51 @@ REMEMBER:
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 text-gray-100">
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
-        <header className="mb-12 text-center">
-          <div className="flex items-center justify-center gap-3 mb-2">
-            <Car className="w-8 h-8 text-blue-400" />
-            <Settings className="w-8 h-8 text-red-400" />
-          </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-400 via-red-400 to-blue-400 bg-clip-text text-transparent mb-2">
-            Highline Motorsports Group
-          </h1>
-          <h2 className="text-2xl font-semibold text-gray-400 mb-6">
-            QuickServ Auto Care
-          </h2>
-          <div className="flex items-center justify-center gap-2 text-xl text-gray-300">
-            <Wrench className="w-6 h-6 text-blue-400" />
-            <span>Technician Notes AI Rewriter</span>
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-slate-800 to-slate-900 text-gray-100">
+      <div className="container mx-auto px-4 py-8 max-w-5xl">
+        {/* Simplified Header with description */}
+        <header className="mb-12 relative">
+          <div className="absolute inset-0 bg-blue-500/10 rounded-2xl blur-3xl -z-10"></div>
+          <div className="bg-gradient-to-r from-slate-800/80 via-slate-900/90 to-slate-800/80 rounded-2xl p-8 border border-slate-700/50 shadow-xl backdrop-blur-sm">
+            <div className="flex items-center justify-center gap-3 text-xl text-gray-300 bg-slate-800/50 py-3 px-6 rounded-full w-fit mx-auto border border-slate-700/50 mb-6">
+              <Wrench className="w-6 h-6 text-blue-400" />
+              <span className="font-medium">Technician Notes AI Rewriter</span>
+              <span className="bg-gradient-to-r from-blue-500 to-red-500 text-white text-sm font-bold py-1 px-2 rounded-md ml-1">V2</span>
+            </div>
+            
+            <div className="max-w-3xl mx-auto text-center">
+              <p className="text-slate-300 leading-relaxed">
+                This tool transforms messy, unformatted technician notes into professionally structured documentation. 
+                Simply paste your original notes in the input field below and click "Rewrite Notes." 
+                The AI will improve grammar, spelling, and formatting while preserving all technical details and chronological order.
+                Perfect for service reports, work orders, and customer-facing documentation.
+              </p>
+            </div>
           </div>
         </header>
 
-        <main className="space-y-6">
-          <div className="bg-gray-800/50 p-6 rounded-xl border border-gray-700">
+        <main className="space-y-8">
+          {/* Input Section with enhanced styling */}
+          <div className="bg-gradient-to-r from-slate-800/50 to-slate-800/30 p-6 rounded-xl border border-slate-700/50 shadow-lg">
+            <div className="flex items-center gap-2 mb-3 text-slate-300">
+              <FileText className="w-5 h-5 text-blue-400" />
+              <h3 className="font-medium">Original Technician Notes</h3>
+            </div>
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Paste your technician notes here..."
-              className="w-full h-48 p-4 rounded-lg bg-gray-800 border border-gray-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition"
+              className="w-full h-48 p-4 rounded-lg bg-slate-800/80 border border-slate-700 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition text-slate-200 placeholder:text-slate-500"
               disabled={isLoading}
             />
           </div>
 
-          <div className="flex justify-center gap-4">
+          {/* Controls with enhanced styling */}
+          <div className="flex flex-col sm:flex-row justify-center gap-4">
             <button
               onClick={rewriteNotes}
               disabled={isLoading || cooldown}
-              className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 rounded-lg flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition shadow-lg"
+              className="px-8 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 rounded-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition shadow-lg text-white font-medium"
             >
               {isLoading ? (
                 <>
@@ -170,41 +180,52 @@ REMEMBER:
                   <span>Processing...</span>
                 </>
               ) : (
-                'Rewrite Notes'
+                <>
+                  <CheckCircle className="w-5 h-5" />
+                  <span>Rewrite Notes</span>
+                </>
               )}
             </button>
             <button
               onClick={clearForm}
               disabled={isLoading}
-              className="px-8 py-3 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 rounded-lg flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition shadow-lg"
+              className="px-8 py-3 bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-800 hover:to-slate-900 rounded-lg flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition shadow-lg border border-slate-600/30 text-white font-medium"
             >
-              Clear Form
+              <AlertCircle className="w-5 h-5" />
+              <span>Clear Form</span>
             </button>
           </div>
 
+          {/* Error message with enhanced styling */}
           {error && (
-            <div className="p-4 bg-red-900/50 border border-red-700 rounded-lg text-red-200">
-              {error}
+            <div className="p-5 bg-gradient-to-r from-red-900/30 to-red-800/20 border border-red-700/50 rounded-lg text-red-200 shadow-lg flex items-start gap-3">
+              <AlertCircle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
+              <p>{error}</p>
             </div>
           )}
 
+          {/* Output Section with enhanced styling */}
           {output && (
             <div className="space-y-4">
-              <div className="relative bg-gray-800/50 p-6 rounded-xl border border-gray-700">
+              <div className="relative bg-gradient-to-r from-slate-800/50 to-slate-800/30 p-6 rounded-xl border border-slate-700/50 shadow-lg">
+                <div className="flex items-center gap-2 mb-3 text-slate-300">
+                  <CheckCircle className="w-5 h-5 text-green-400" />
+                  <h3 className="font-medium">Rewritten Notes</h3>
+                </div>
                 <textarea
                   value={output}
                   readOnly
-                  className="w-full h-48 p-4 rounded-lg bg-gray-800 border border-gray-700 outline-none"
+                  className="w-full h-56 p-4 rounded-lg bg-slate-800/80 border border-slate-700 outline-none text-slate-200"
                 />
                 <button
                   onClick={copyToClipboard}
-                  className="absolute top-8 right-8 p-2 bg-gray-700 hover:bg-gray-600 rounded-lg transition shadow-md"
+                  className="absolute top-12 right-8 p-2.5 bg-slate-700 hover:bg-slate-600 rounded-lg transition shadow-md border border-slate-600/30 group"
                   title="Copy to clipboard"
                 >
                   {copied ? (
                     <ClipboardCheck className="w-5 h-5 text-green-400" />
                   ) : (
-                    <Clipboard className="w-5 h-5" />
+                    <Clipboard className="w-5 h-5 group-hover:text-blue-400 transition-colors" />
                   )}
                 </button>
               </div>
@@ -212,9 +233,14 @@ REMEMBER:
           )}
         </main>
 
-        <footer className="mt-12 text-center text-gray-500 text-sm">
-          <p className="font-medium">Highline Motorsports Group / QuickServ Auto Care</p>
-          <p className="mt-2">All data is processed in real-time and not stored</p>
+        {/* Simplified Footer */}
+        <footer className="mt-16 text-center">
+          <div className="bg-gradient-to-r from-slate-800/50 to-slate-800/30 p-5 rounded-xl border border-slate-700/50 shadow-lg">
+            <p className="mt-2 text-slate-400 text-sm">All data is processed in real-time and not stored</p>
+            <div className="mt-3 pt-3 border-t border-slate-700/50 text-xs text-slate-500">
+              Powered by GPT-4 Turbo
+            </div>
+          </div>
         </footer>
       </div>
     </div>
